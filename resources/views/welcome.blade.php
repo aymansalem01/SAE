@@ -315,10 +315,10 @@ nav img {
         const submit = document.getElementById("submit");
         const inputStudentName = document.getElementById("studentName");
         const inputStudentEmail = document.getElementById("studentEmail");
-        const studentName = sessionStorage.getItem("studentName") || "";
-        const studentEmail = sessionStorage.getItem("studentEmail") || "";
+        let studentName = sessionStorage.getItem("studentName") || "";
+        let studentEmail = sessionStorage.getItem("studentEmail") || "";
         const inputDrName = document.getElementById("drName");
-        const drName = sessionStorage.getItem("drName") || "";
+        let drName = sessionStorage.getItem("drName") || "";
         let assistant_id = '';
         window.OPENAI_KEY = "{{ config('services.openai.key') }}"
 
@@ -468,6 +468,9 @@ nav img {
                 // sessionStorage.setItem("subject", inputSubject.value);
                 sessionStorage.setItem("studentEmail", inputStudentEmail.value);
                 sessionStorage.setItem("drName", inputDrName.value);
+                drName = inputDrName.value;
+                studentName = inputStudentName.value;
+                studentEmail = inputStudentEmail.value;
                 closeButton.click();
             } else {
                 alert("Please fill all the fields");
