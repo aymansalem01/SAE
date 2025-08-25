@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SEA Chatbot</title>
+    <link rel="stylesheet" href={{ asset('assets\style.css') }} />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "openai": "https://esm.run/openai"
+        }
+      }
+    </script>
+    <style>
+
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="background p-3">
+        <img src={{asset("assets\SAE-Horizontal-White.webp")}} alt="SEA Logo" />
+    </nav>
+
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <aside class="aside">
+            <button class="button" id="newChat">+ New Chat</button>
+            <button class="clrButton" id="clrChat">clear chat</button>
+        </aside>
+
+        <!-- Chat Section -->
+        <section class="chatSection">
+            <!-- Welcome Section -->
+            <div class="welcome">
+                <div class="cycle">
+                    <img src={{asset("assets\image.png")}} alt="Bot Logo" width="80" height="80" />
+                </div>
+                <h2 style="color: white">Welcome to Mr.X AI</h2>
+                <h4 style="color: #88888a; max-width: 450px">
+                    I'm here to help you with any questions or tasks. Start a
+                    conversation by typing a message below.
+                </h4>
+            </div>
+
+            <!-- Messages -->
+            <div class="chatMessages" id="showMessage"></div>
+
+            <!-- Input Section -->
+            <div class="inputSection">
+                <input type="text" placeholder="How can I help you today?" id="userInput" />
+                <button type="button" class="sendBtn" id="sendChat">➤</button>
+            </div>
+        </section>
+    </div>
+    <button type="button" data-bs-toggle="modal" data-bs-target="#formModal" style="display: none"
+        id="openModal"></button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content" style="background-color: #101010;">
+                <div class="modal-header">
+                    <div class="d-flex gap-3">
+                        <div class="chatLogo">
+                            <img src={{asset("assets\image.png")}} alt="" width="90%" />
+                        </div>
+                        <div>
+                            <h1 class="modal-title fs-5 text-white mb-1">
+                                AI Study Assistant
+                            </h1>
+                            <h5 style="color: gray; font-size: 12px">
+                                Get help with your studied
+                            </h5>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"
+                        id="closeButton"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form action="">
+                        <div class="mb-4 pb-2">
+                            <label for="recipient-name" class="col-form-label text-white fs-5 fw-bold">Select DR
+                                Name:</label>
+                            <select name="drName" id="drName" required class="form-select text-white fs-5">
+                                <option>choose a subject ....</option>
+                                <option value="sami">DR. Sami</option>
+                                <option value="marwan">DR. Marwan</option>
+                            </select>
+                        </div>
+                        <div class="mb-4 pb-2">
+                            <label for="message-text" class="col-form-label text-white fs-5 fw-bold">Student
+                                Name:</label>
+                            <input id="studentName" type="text" class="form-control" placeholder="Enter your name" />
+                        </div>
+                        <div class="mb-4 pb-2">
+                            <label for="message-text" class="col-form-label text-white fw-bold fs-5">Student
+                                Email:</label>
+                            <input id="studentEmail" type="email" class="form-control"
+                                placeholder="Enter your email" />
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <!-- <button type="button" class="modalbtn" data-bs-dismiss="modal">Close</button> -->
+                    <button type="button" class="modalbtn saveBtn" id="submit">
+                        submit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import OpenAI from "openai";
+
+        // getting dom elements
+        const showMessages = document.getElementById("showMessage");
+        const userInput = document.getElementById("userInput");
+        const sendChat = document.getElementById("sendChat");
+        const welcome = document.querySelector(".welcome");
+        const newChatBtn = document.getElementById("newChat");
+        const clrButton = document.getElementById("clrChat");
+        const openModal = document.getElementById("openModal");
+        const closeButton = document.getElementById("closeButton");
+        const submit = document.getElementById("submit");
+        const inputStudentName = document.getElementById("studentName");
+        const inputStudentEmail = document.getElementById("studentEmail");
+        const studentName = sessionStorage.getItem("studentName") || "";
+        const studentEmail = sessionStorage.getItem("studentEmail") || "";
+        const inputDrName = document.getElementById("drName");
+        const drName = sessionStorage.getItem("drName") || "";
+        let assistant_id = '';
+        window.OPENAI_KEY = "{{ config('services.openai.key') }}"
+
+        const client = new OpenAI({
+            apiKey: OPENAI_KEY,
+            dangerouslyAllowBrowser: true,
+        });
+
+
+        // when windows load
+        if (studentName == "" && drName == "") {
+            openModal.click();
+        }
+        let chatHistory = JSON.parse(sessionStorage.getItem("chatHistory")) || [];
+        if (chatHistory.length > 0) {
+            renderMessages();
+        }
+
+        // Function to start a new chat
+        sendChat.addEventListener("click", startChat);
+        document.addEventListener("keydown", (event) => {
+            if (event.key == "Enter") {
+                // event.preventDefault();
+                startChat();
+            }
+        });
+        submit.addEventListener("click", modalForm);
+
+
+        // render messages from session storage
+        function renderMessages() {
+            if (chatHistory.length == 0) {
+                showMessages.style.display = "none";
+                welcome.style.display = "block";
+            } else {
+                showMessages.style.display = "block";
+                welcome.style.display = "none";
+                showMessages.innerHTML = "";
+                chatHistory.forEach((msg) => {
+                    const msgElement = document.createElement("div");
+                    msgElement.classList.add("message", msg.role);
+                    msgElement.textContent = msg.content;
+                    showMessages.appendChild(msgElement);
+                });
+                showMessages.scrollTop = showMessages.scrollHeight;
+            }
+        }
+
+        // receive message from user and send to openai using askOpenAI function
+        function startChat() {
+            if (userInput.value == "") return;
+            if (studentName == "" && studentEmail == "" && drName == "") {
+                openModal.click();
+                return;
+            }
+
+            if (drName == 'sami') {
+                assistant_id = 'asst_4K9Q6Wv4jyCuLHiwTJy1Ihat';
+            }
+            if (drName == 'marwan') {
+                assistant_id = 'asst_GyPiRnBa90HeLYml2daSxgyV';
+            }
+            showMessages.style.display = "block";
+            welcome.style.display = "none";
+            const message = userInput.value;
+            userInput.value = "";
+            const messageElement = document.createElement("div");
+            messageElement.classList.add("message", "user");
+            messageElement.textContent = message;
+            showMessages.appendChild(messageElement);
+            chatHistory.push({
+                role: "user",
+                content: message
+            });
+            askOpenAI(message);
+        }
+
+        // function to send message to openai and send to show response using showResponseMessage
+        async function askOpenAI(message) {
+
+            const threadResp = await client.beta.threads.create();
+            const threadId = threadResp.id;
+
+            await client.beta.threads.messages.create(threadId, {
+                role: "user",
+                content: message,
+            });
+            const runResp = await client.beta.threads.runs.create(threadId, {
+                assistant_id: assistant_id,
+            });
+            const runId = runResp.id;
+            let run = await client.beta.threads.runs.retrieve(runId, {
+                thread_id: threadId,
+            });
+            do {
+                run = await client.beta.threads.runs.retrieve(runId, {
+                    thread_id: threadId,
+                });
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+            } while (run.status == "in_progress")
+
+            const result = await client.beta.threads.messages.list(threadId);
+            const aiMessage = result.data.find(m => m.role === "assistant");
+            showResponseMessage(aiMessage?.content[0].text.value);
+        }
+
+
+        //   showResponseMessage(response.choices[0].message.content); // response.choices[0].message.content
+
+
+        // receive response and show on screen and going to save chat in session storage using saveChat function
+        function showResponseMessage(response) {
+            const responseElement = document.createElement("div");
+            responseElement.classList.add("message", "ai");
+            responseElement.textContent = response;
+            showMessages.appendChild(responseElement);
+            showMessages.scrollTop = showMessages.scrollHeight;
+            chatHistory.push({
+                role: "ai",
+                content: response
+            });
+            saveChat();
+        }
+
+        //save pushing chat in session storage
+        function saveChat() {
+            sessionStorage.setItem("chatHistory", JSON.stringify(chatHistory));
+        }
+
+        // newChat btn function to clear chat
+        newChatBtn.addEventListener("click", () => {
+            chatHistory = [];
+            indexFlag = 0;
+        });
+        // clear chat function
+        clrButton.addEventListener("click", () => {
+            chatHistory = [];
+            sessionStorage.removeItem("chatHistory");
+            renderMessages();
+        });
+
+        //save student info from modal
+        function modalForm() {
+            if (inputStudentName.value != "" && inputStudentEmail.value != "" && inputDrName.value != "") {
+                sessionStorage.setItem("studentName", inputStudentName.value);
+                // sessionStorage.setItem("subject", inputSubject.value);
+                sessionStorage.setItem("studentEmail", inputStudentEmail.value);
+                sessionStorage.setItem("drName", inputDrName.value);
+                closeButton.click();
+            } else {
+                alert("Please fill all the fields");
+            }
+        }
+    </script>
+</body>
+
+</html>
