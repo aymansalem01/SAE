@@ -82,7 +82,7 @@
 
         .cycle {
             border-radius: 50%;
-            background-color: #ffdd00;
+            background-color: #e5c80d;
             width: 120px;
             height: 120px;
             display: flex;
