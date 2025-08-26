@@ -18,197 +18,236 @@
     </script>
     <style>
         body {
-    margin: 0;
-    padding: 0;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-}
-.background {
-    background-color: #101010;
-}
-nav img {
-    max-width: 200px;
-    height: auto;
-}
-.aside {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    /* min-height: 95vh; */
-    height: auto;
-    width: 20%;
-    background-color: #101010;
-    padding-top: 25px;
-}
-.button {
-    background-color: #ffdd00;
-    color: black;
-    border-radius: 50px;
-    padding: 15px 35px;
-    font-size: 16px;
-    font-weight: 600;
-    text-align: center;
-    border: none;
-    transition: transform 0.2s ease-in-out;
-}
-.button:hover {
-    transform: scale(1.05);
-}
-.chatSection {
-    background-color: black;
-    width: 80%;
-    height: 93.8vh;
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-.welcome {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    text-align: center;
-    gap: 20px;
-    padding: 40px 20px;
-}
-.cycle {
-    border-radius: 50%;
-    background-color: #ffdd00;
-    width: 120px;
-    height: 120px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-}
-.chatMessages {
-    flex: 1;
-    overflow-y: scroll;
-    padding: 20px;
-    display: none;
-}
-.chatMessages::-webkit-scrollbar {
-    display: none;
-}
-.message {
-    max-width: 70%;
-    padding: 12px 16px;
-    border-radius: 12px;
-    margin-bottom: 15px;
-    line-height: 1.5;
-    word-wrap: break-word;
-    animation: fadeIn 0.2s ease-in;
-}
-.ai {
-    background-color: #444654;
-    color: white;
-    border-top-left-radius: 0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-.user {
-    background-color: #10a37f;
-    color: white;
-    margin-left: auto;
-    border-top-right-radius: 0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-.inputSection {
-    border-top: 1px solid #565869;
-    padding: 15px 20px;
-    display: flex;
-    gap: 10px;
-    align-items: center;
-}
-.inputSection input {
-    flex: 1;
-    border-radius: 20px;
-    padding: 14px;
-    font-size: 16px;
-    background-color: #1a1a1a;
-    color: white;
-    border: none;
-    outline: none;
-}
-.sendBtn {
-    background-color: #ffdd00;
-    padding: 14px 18px;
-    font-size: 18px;
-    border: none;
-    border-radius: 50%;
-    transition: transform 0.2s ease-in-out;
-}
-.sendBtn:hover {
-    transform: scale(1.1);
-}
-@media screen and (max-width: 1440px) {
-    .chatSection {
-        height: 90vh;
-    }
-}
-.clrButton {
-    background-color: #808080;
-    margin-top: 40px;
-    font-size: 18px;
-    border: none;
-    border-radius: 50px;
-    padding: 15px 35px;
-    transition: transform 0.2s ease-in-out;
-    color: white;
-}
-.clrButton:hover {
-    transform: scale(1.1);
-}
-.modalbtn {
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color: #808080;
-    color: #fff;
-    border: none;
-    border-radius: 50px;
-    cursor: pointer;
-}
-.saveBtn {
-    background-color: #ffdd00;
-    color: black;
-}
-.mb-4 input::placeholder {
-    color: #ffffff;
-    font-size: 16px;
-}
-.mb-4 input:focus {
-    background-color: #1f2a38;
-    color: white;
-    font-size: large;
-}
-.mb-4 input {
-    background-color: #4f5866;
-    border: none;
-    padding: 10px;
-    color: white;
-}
-.mb-4 select {
-    background-color: #4f5866;
-    border: none;
-    padding: 10px;
-    color: white;
-}
-.chatLogo {
-    width: 4rem;
-    height: 4rem;
-    border-radius: 999px;
-    background-color: #ffdd00;
-    padding: 2px;
-    text-align: center;
-}
+        .background {
+            background-color: #242424;
+        }
 
+        nav img {
+            max-width: 200px;
+            height: auto;
+        }
+
+        .aside {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            /* min-height: 95vh; */
+            height: auto;
+            width: 20%;
+            background-color: #242424;
+            padding-top: 25px;
+        }
+
+        .button {
+            background-color: #e5c80d;
+            color: black;
+            border-radius: 50px;
+            padding: 15px 35px;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            border: none;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .button:hover {
+            transform: scale(1.05);
+        }
+
+        .chatSection {
+            background-color: rgb(51, 51, 51);
+            width: 80%;
+            height: 93.8vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            align-content: center
+        }
+
+        .welcome {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            gap: 20px;
+            padding: 40px 20px;
+        }
+
+        .cycle {
+            border-radius: 50%;
+            background-color: #ffdd00;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .chatMessages {
+            flex: 1;
+            overflow-y: auto;
+            scroll-behavior: smooth
+            padding: 20px;
+            display: none;
+            flex-direction: column;
+            align-content: end;
+            width: 85%;
+            justify-items: center;
+
+        }
+
+        .chatMessages::-webkit-scrollbar {
+            display: none;
+        }
+
+        .message {
+            max-width: 65%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            color: rgb(230, 230, 230)
+            word-wrap: break-word;
+            animation: fadeIn 0.2s ease-in;
+        }
+
+        .ai {
+            background-color: #444654;
+            border-top-left-radius: 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            margin-right: auto;
+            margin-left: 200px;
+        }
+
+        .user {
+            background-color: rgb(180, 142, 36);
+            margin-left: auto;
+            border-top-right-radius: 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .inputSection {
+            border-top: 1px solid #565869;
+            padding: 15px 20px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .inputSection input {
+            flex: 1;
+            border-radius: 20px;
+            padding: 14px;
+            font-size: 16px;
+            background-color: #1a1a1a;
+            color: white;
+            border: none;
+            outline: none;
+        }
+
+        .sendBtn {
+            background-color: #e5c80d;
+            padding: 14px 18px;
+            font-size: 18px;
+            border: none;
+            border-radius: 50%;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .sendBtn:hover {
+            transform: scale(1.1);
+        }
+
+        @media screen and (max-width: 1440px) {
+            .chatSection {
+                height: 90vh;
+            }
+        }
+
+        .clrButton {
+            background-color: #808080;
+            margin-top: 40px;
+            font-size: 18px;
+            border: none;
+            border-radius: 50px;
+            padding: 15px 35px;
+            transition: transform 0.2s ease-in-out;
+            color: white;
+        }
+
+        .clrButton:hover {
+            transform: scale(1.1);
+        }
+
+        .modalbtn {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #808080;
+            color: #fff;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+        }
+
+        .saveBtn {
+            background-color: #ffdd00;
+            color: black;
+        }
+
+        .mb-4 input::placeholder {
+            color: #ffffff;
+            font-size: 16px;
+        }
+
+        .mb-4 input:focus {
+            background-color: #1f2a38;
+            color: white;
+            font-size: large;
+        }
+
+        .mb-4 input {
+            background-color: #4f5866;
+            border: none;
+            padding: 10px;
+            color: white;
+        }
+
+        .mb-4 select {
+            background-color: #4f5866;
+            border: none;
+            padding: 10px;
+            color: white;
+        }
+
+        .chatLogo {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 999px;
+            background-color: #ffdd00;
+            padding: 2px;
+            text-align: center;
+        }
+
+        #loader {
+            display: none;
+            margin-left: 100px;
+            margin-top: 40px
+        }
     </style>
 </head>
 
 <body>
     <!-- Navbar -->
     <nav class="background p-3">
-        <img src={{asset("assets\SAE-Horizontal-White.webp")}} alt="SEA Logo" />
+        <img src={{ asset('assets\SAE-Horizontal-White.webp') }} alt="SEA Logo" />
     </nav>
 
     <div class="d-flex">
@@ -223,7 +262,7 @@ nav img {
             <!-- Welcome Section -->
             <div class="welcome">
                 <div class="cycle">
-                    <img src={{asset("assets\image.png")}} alt="Bot Logo" width="80" height="80" />
+                    <img src={{ asset('assets\image.png') }} alt="Bot Logo" width="80" height="80" />
                 </div>
                 <h2 style="color: white">Welcome to Mr.X AI</h2>
                 <h4 style="color: #88888a; max-width: 450px">
@@ -233,7 +272,24 @@ nav img {
             </div>
 
             <!-- Messages -->
-            <div class="chatMessages" id="showMessage"></div>
+            <div class="chatMessages" id="showMessage">
+            </div>
+            <div class="" style="height: 70px;" id="loader">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="50">
+                    <circle fill="#50FFB4" stroke="#50FFB4" stroke-width="5" r="25" cx="240" cy="70">
+                        <animate attributeName="opacity" calcMode="spline" dur="2s" values="1;0;1;"
+                            keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="-.4s"></animate>
+                    </circle>
+                    <circle fill="#50FFB4" stroke="#50FFB4" stroke-width="5" r="25" cx="320" cy="70">
+                        <animate attributeName="opacity" calcMode="spline" dur="2s" values="1;0;1;"
+                            keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="-.2s"></animate>
+                    </circle>
+                    <circle fill="#50FFB4" stroke="#50FFB4" stroke-width="5" r="25" cx="400" cy="70">
+                        <animate attributeName="opacity" calcMode="spline" dur="2s" values="1;0;1;"
+                            keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="0s"></animate>
+                    </circle>
+                </svg>
+            </div>
 
             <!-- Input Section -->
             <div class="inputSection">
@@ -252,7 +308,7 @@ nav img {
                 <div class="modal-header">
                     <div class="d-flex gap-3">
                         <div class="chatLogo">
-                            <img src={{asset("assets\image.png")}} alt="" width="90%" />
+                            <img src={{ asset('assets\image.png') }} alt="" width="90%" />
                         </div>
                         <div>
                             <h1 class="modal-title fs-5 text-white mb-1">
@@ -280,7 +336,8 @@ nav img {
                         <div class="mb-4 pb-2">
                             <label for="message-text" class="col-form-label text-white fs-5 fw-bold">Student
                                 Name:</label>
-                            <input id="studentName" type="text" class="form-control" placeholder="Enter your name" />
+                            <input id="studentName" type="text" class="form-control"
+                                placeholder="Enter your name" />
                         </div>
                         <div class="mb-4 pb-2">
                             <label for="message-text" class="col-form-label text-white fw-bold fs-5">Student
@@ -303,6 +360,7 @@ nav img {
     <script type="module">
         import OpenAI from "openai";
 
+
         // getting dom elements
         const showMessages = document.getElementById("showMessage");
         const userInput = document.getElementById("userInput");
@@ -320,7 +378,8 @@ nav img {
         const inputDrName = document.getElementById("drName");
         let drName = sessionStorage.getItem("drName") || "";
         let assistant_id = '';
-        window.OPENAI_KEY = "{{ config('services.openai.key') }}"
+        window.OPENAI_KEY = "{{ config('services.openai.key') }}";
+        const loader = document.getElementById("loader");
 
         const client = new OpenAI({
             apiKey: OPENAI_KEY,
@@ -389,10 +448,12 @@ nav img {
             messageElement.classList.add("message", "user");
             messageElement.textContent = message;
             showMessages.appendChild(messageElement);
+            loader.style.display = "block";
             chatHistory.push({
                 role: "user",
                 content: message
             });
+            showMessages.scrollTop = showMessages.scrollHeight;
             askOpenAI(message);
         }
 
@@ -417,12 +478,13 @@ nav img {
                 run = await client.beta.threads.runs.retrieve(runId, {
                     thread_id: threadId,
                 });
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                await new Promise(resolve => setTimeout(resolve, 500));
 
             } while (run.status == "in_progress")
 
             const result = await client.beta.threads.messages.list(threadId);
             const aiMessage = result.data.find(m => m.role === "assistant");
+            loader.style.display = "none";
             showResponseMessage(aiMessage?.content[0].text.value);
         }
 
