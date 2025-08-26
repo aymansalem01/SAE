@@ -114,7 +114,7 @@
             border-radius: 12px;
             margin-bottom: 15px;
             line-height: 1.5;
-            color: rgb(230, 230, 230)
+            color: rgb(230, 230, 230);
             word-wrap: break-word;
             animation: fadeIn 0.2s ease-in;
         }
