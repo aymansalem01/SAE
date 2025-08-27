@@ -170,6 +170,9 @@
             .chatSection {
                 height: 90vh;
             }
+            .ai {
+                margin-left: 150px;
+            }
         }
 
         .clrButton {
