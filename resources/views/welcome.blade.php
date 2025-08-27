@@ -279,15 +279,15 @@
             </div>
             <div class="" style="height: 70px;" id="loader">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="50">
-                    <circle fill="#50FFB4" stroke="#50FFB4" stroke-width="5" r="25" cx="240" cy="70">
+                    <circle fill="#ffdd00" stroke="#50FFB4" stroke-width="5" r="25" cx="240" cy="70">
                         <animate attributeName="opacity" calcMode="spline" dur="2s" values="1;0;1;"
                             keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="-.4s"></animate>
                     </circle>
-                    <circle fill="#50FFB4" stroke="#50FFB4" stroke-width="5" r="25" cx="320" cy="70">
+                    <circle fill="#ffdd00" stroke="#50FFB4" stroke-width="5" r="25" cx="320" cy="70">
                         <animate attributeName="opacity" calcMode="spline" dur="2s" values="1;0;1;"
                             keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="-.2s"></animate>
                     </circle>
-                    <circle fill="#50FFB4" stroke="#50FFB4" stroke-width="5" r="25" cx="400" cy="70">
+                    <circle fill="#ffdd00" stroke="#50FFB4" stroke-width="5" r="25" cx="400" cy="70">
                         <animate attributeName="opacity" calcMode="spline" dur="2s" values="1;0;1;"
                             keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="0s"></animate>
                     </circle>
