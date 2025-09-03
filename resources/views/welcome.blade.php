@@ -508,7 +508,6 @@
 
         // receive response and show on screen and going to save chat in session storage using saveChat function
         function showResponseMessage(response) {
-            console.log(response);
             const responseElement = document.createElement("div");
             responseElement.classList.add("message", "ai");
             responseElement.textContent = response.replaceAll("**", '');
