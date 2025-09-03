@@ -125,6 +125,7 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
             margin-right: auto;
             margin-left: 200px;
+            white-space: pre-line;
         }
 
         .user {
@@ -332,8 +333,10 @@
                                 Name:</label>
                             <select name="drName" id="drName" required class="form-select text-white fs-5">
                                 <option>choose a subject ....</option>
-                                <option value="sami">DR. Sami</option>
-                                <option value="marwan">DR. Marwan</option>
+                                <option value="sami">DR.Sami</option>
+                                <option value="marwan">DR.Marwan</option>
+                                <option value="saed">DR.Saed</option>
+
                             </select>
                         </div>
                         <div class="mb-4 pb-2">
@@ -383,6 +386,7 @@
         let assistant_id = '';
         window.OPENAI_KEY = "{{ config('services.openai.key') }}";
         const loader = document.getElementById("loader");
+        let thread = sessionStorage.getItem("thread") || "";
 
         const client = new OpenAI({
             apiKey: OPENAI_KEY,
@@ -412,6 +416,7 @@
 
         // render messages from session storage
         function renderMessages() {
+            thread = sessionStorage.getItem("thread") || "";
             if (chatHistory.length == 0) {
                 showMessages.style.display = "none";
                 welcome.style.display = "block";
@@ -443,6 +448,9 @@
             if (drName == 'marwan') {
                 assistant_id = 'asst_GyPiRnBa90HeLYml2daSxgyV';
             }
+            if(drName == 'saed' ){
+                assistant_id = 'asst_aQBmqKMwsSo02OwqlUlYARP5';
+            }
             showMessages.style.display = "block";
             welcome.style.display = "none";
             const message = userInput.value;
@@ -462,9 +470,12 @@
 
         // function to send message to openai and send to show response using showResponseMessage
         async function askOpenAI(message) {
-
-            const threadResp = await client.beta.threads.create();
-            const threadId = threadResp.id;
+            if(thread == ''){
+                const threadResp = await client.beta.threads.create();
+                thread = threadResp.id;
+                sessionStorage.setItem("thread", thread);
+            }
+            const threadId = thread ;
 
             await client.beta.threads.messages.create(threadId, {
                 role: "user",
@@ -497,9 +508,10 @@
 
         // receive response and show on screen and going to save chat in session storage using saveChat function
         function showResponseMessage(response) {
+            console.log(response);
             const responseElement = document.createElement("div");
             responseElement.classList.add("message", "ai");
-            responseElement.textContent = response;
+            responseElement.textContent = response.replaceAll("**", '');
             showMessages.appendChild(responseElement);
             showMessages.scrollTop = showMessages.scrollHeight;
             chatHistory.push({
@@ -523,6 +535,7 @@
         clrButton.addEventListener("click", () => {
             chatHistory = [];
             sessionStorage.removeItem("chatHistory");
+            sessionStorage.removeItem('thread');
             renderMessages();
         });
 
