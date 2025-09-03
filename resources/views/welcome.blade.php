@@ -535,6 +535,7 @@
             chatHistory = [];
             sessionStorage.removeItem("chatHistory");
             sessionStorage.removeItem('thread');
+            window.location.reload();
             renderMessages();
         });
 
