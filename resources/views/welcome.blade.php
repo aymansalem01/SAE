@@ -336,6 +336,8 @@
                                 <option value="sami">DR.Sami</option>
                                 <option value="marwan">DR.Marwan</option>
                                 <option value="saed">DR.Saed</option>
+                                <option value="yousef">DR.Yousef</option>
+
 
                             </select>
                         </div>
@@ -451,6 +453,9 @@
             if(drName == 'saed' ){
                 assistant_id = 'asst_aQBmqKMwsSo02OwqlUlYARP5';
             }
+            if(drName == 'yousef' ){
+                assistant_id = 'asst_Gk0awJHUaBejHyWRbGGwqO9B';
+            }
             showMessages.style.display = "block";
             welcome.style.display = "none";
             const message = userInput.value;
@@ -501,10 +506,6 @@
             loader.style.display = "none";
             showResponseMessage(aiMessage?.content[0].text.value);
         }
-
-
-        //   showResponseMessage(response.choices[0].message.content); // response.choices[0].message.content
-
 
         // receive response and show on screen and going to save chat in session storage using saveChat function
         function showResponseMessage(response) {
