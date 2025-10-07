@@ -94,8 +94,7 @@
         .chatMessages {
             flex: 1;
             overflow-y: auto;
-            scroll-behavior: smooth
-            padding: 20px;
+            scroll-behavior: smooth padding: 20px;
             display: none;
             flex-direction: column;
             align-content: end;
@@ -171,6 +170,7 @@
             .chatSection {
                 height: 90vh;
             }
+
             .ai {
                 margin-left: 150px;
             }
@@ -297,7 +297,13 @@
 
             <!-- Input Section -->
             <div class="inputSection">
-                <input type="text" placeholder="How can I help you today?" id="userInput" />
+                <input type="text" placeholder="How can I help you today?" id="userInput"
+                    style="background-color: #101010" />
+                <select name="type" id="type" required class=" text-white fs-5"
+                    style="background-color: #101010">
+                    <option value="text" selected>Talk to Mr.X</option>
+                    <option value="image">image generate</option>
+                </select>
                 <button type="button" class="sendBtn" id="sendChat">➤</button>
             </div>
         </section>
@@ -323,8 +329,8 @@
                             </h5>
                         </div>
                     </div>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"
-                        id="closeButton"></button>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Close" id="closeButton"></button>
                 </div>
                 <div class="modal-body p-4">
                     <form action="">
@@ -389,6 +395,7 @@
         window.OPENAI_KEY = "{{ config('services.openai.key') }}";
         const loader = document.getElementById("loader");
         let thread = sessionStorage.getItem("thread") || "";
+        const type = document.getElementById("type");
 
         const client = new OpenAI({
             apiKey: OPENAI_KEY,
@@ -450,10 +457,10 @@
             if (drName == 'marwan') {
                 assistant_id = 'asst_GyPiRnBa90HeLYml2daSxgyV';
             }
-            if(drName == 'saed' ){
+            if (drName == 'saed') {
                 assistant_id = 'asst_aQBmqKMwsSo02OwqlUlYARP5';
             }
-            if(drName == 'yousef' ){
+            if (drName == 'yousef') {
                 assistant_id = 'asst_Gk0awJHUaBejHyWRbGGwqO9B';
             }
             showMessages.style.display = "block";
@@ -470,17 +477,48 @@
                 content: message
             });
             showMessages.scrollTop = showMessages.scrollHeight;
-            askOpenAI(message);
+            if(type.value === 'image'){
+                console.log("image");
+                generate_image(message);
+            }
+            else if (type.value === 'text'){
+                console.log("text");
+                askOpenAI(message);
+            }
+        }
+        async function generate_image(message) {
+            const response = await client.images.generate({
+                model: "gpt-image-1",
+                prompt: message,
+                size: "1024x1024",
+            });
+            console.log(response);
+            const image_url = response.data[0].url;
+            const imgElement = document.createElement("img");
+            imgElement.src = image_url;
+            imgElement.alt = message;
+            imgElement.style.maxWidth = "300px";
+            imgElement.style.borderRadius = "12px";
+            const responseElement = document.createElement("div");
+            responseElement.classList.add("message", "ai");
+            responseElement.appendChild(imgElement);
+            showMessages.appendChild(responseElement);
+            showMessages.scrollTop = showMessages.scrollHeight;
+            chatHistory.push({
+                role: "ai",
+                content: image_url
+            });
+            saveChat();
         }
 
         // function to send message to openai and send to show response using showResponseMessage
         async function askOpenAI(message) {
-            if(thread == ''){
+            if (thread == '') {
                 const threadResp = await client.beta.threads.create();
                 thread = threadResp.id;
                 sessionStorage.setItem("thread", thread);
             }
-            const threadId = thread ;
+            const threadId = thread;
 
             await client.beta.threads.messages.create(threadId, {
                 role: "user",
