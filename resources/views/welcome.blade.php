@@ -127,6 +127,20 @@
             white-space: pre-line;
         }
 
+        .image {
+            background-color: #444654;
+            border-top-left-radius: 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            margin-right: auto;
+            margin-left: 200px;
+            white-space: pre-line;
+        }
+
+        .image img {
+            max-width: 300px;
+            border-radius: 12px;
+        }
+
         .user {
             background-color: rgb(180, 142, 36);
             margin-left: auto;
@@ -433,12 +447,26 @@
                 showMessages.style.display = "block";
                 welcome.style.display = "none";
                 showMessages.innerHTML = "";
+
                 chatHistory.forEach((msg) => {
                     const msgElement = document.createElement("div");
                     msgElement.classList.add("message", msg.role);
-                    msgElement.textContent = msg.content;
+
+                    if (msg.role === "image") {
+                        const imgElement = document.createElement("img");
+                        imgElement.src = msg.content;
+                        imgElement.alt = "Generated Image";
+                        imgElement.style.maxWidth = "300px";
+                        imgElement.style.borderRadius = "12px";
+                        msgElement.classList.add("image");
+                        msgElement.appendChild(imgElement);
+                    } else {
+                        msgElement.textContent = msg.content;
+                    }
+
                     showMessages.appendChild(msgElement);
                 });
+
                 showMessages.scrollTop = showMessages.scrollHeight;
             }
         }
@@ -477,20 +505,20 @@
                 content: message
             });
             showMessages.scrollTop = showMessages.scrollHeight;
-            if(type.value === 'image'){
+            if (type.value === 'image') {
                 console.log("image");
                 generate_image(message);
-            }
-            else if (type.value === 'text'){
+            } else if (type.value === 'text') {
                 console.log("text");
                 askOpenAI(message);
             }
         }
         async function generate_image(message) {
             const response = await client.images.generate({
-                model: "gpt-image-1",
+                model: "dall-e-3",
                 prompt: message,
                 size: "1024x1024",
+                response_format: "url"
             });
             console.log(response);
             const image_url = response.data[0].url;
@@ -500,14 +528,15 @@
             imgElement.style.maxWidth = "300px";
             imgElement.style.borderRadius = "12px";
             const responseElement = document.createElement("div");
-            responseElement.classList.add("message", "ai");
+            responseElement.classList.add("message", "image");
             responseElement.appendChild(imgElement);
             showMessages.appendChild(responseElement);
             showMessages.scrollTop = showMessages.scrollHeight;
             chatHistory.push({
-                role: "ai",
+                role: "image",
                 content: image_url
             });
+            loader.style.display = "none";
             saveChat();
         }
 
