@@ -506,10 +506,8 @@
             });
             showMessages.scrollTop = showMessages.scrollHeight;
             if (type.value === 'image') {
-                console.log("image");
                 generate_image(message);
             } else if (type.value === 'text') {
-                console.log("text");
                 askOpenAI(message);
             }
         }
