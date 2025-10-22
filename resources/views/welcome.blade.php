@@ -519,6 +519,9 @@
                 response_format: "url"
             });
             console.log(response);
+            if (!response || !response.data || response.data.length === 0) {
+                errorHandler('No image URL returned Please Try again Based on policy.');
+            }
             const image_url = response.data[0].url;
             const imgElement = document.createElement("img");
             imgElement.src = image_url;
@@ -535,6 +538,19 @@
                 content: image_url
             });
             loader.style.display = "none";
+            saveChat();
+        }
+        function errorHandler(error) {
+            const errorElement = document.createElement("div");
+            errorElement.classList.add("message", "ai");
+            errorElement.textContent = "An error occurred: " + error;
+            showMessages.appendChild(errorElement);
+            showMessages.scrollTop = showMessages.scrollHeight;
+            loader.style.display = "none";
+            chatHistory.push({
+                role: "ai",
+                content: "An error occurred: " + error
+            });
             saveChat();
         }
 
