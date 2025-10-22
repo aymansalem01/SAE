@@ -313,11 +313,11 @@
             <div class="inputSection">
                 <input type="text" placeholder="How can I help you today?" id="userInput"
                     style="background-color: #101010" />
-                <select name="type" id="type" required class=" text-white fs-5"
+                {{-- <select name="type" id="type" required class=" text-white fs-5"
                     style="background-color: #101010">
                     <option value="text" selected>Talk to Mr.X</option>
                     <option value="image">image generate</option>
-                </select>
+                </select> --}}
                 <button type="button" class="sendBtn" id="sendChat">➤</button>
             </div>
         </section>
@@ -409,7 +409,7 @@
         window.OPENAI_KEY = "{{ config('services.openai.key') }}";
         const loader = document.getElementById("loader");
         let thread = sessionStorage.getItem("thread") || "";
-        const type = document.getElementById("type");
+        // const type = document.getElementById("type");
 
         const client = new OpenAI({
             apiKey: OPENAI_KEY,
@@ -505,11 +505,12 @@
                 content: message
             });
             showMessages.scrollTop = showMessages.scrollHeight;
-            if (type.value === 'image') {
-                generate_image(message);
-            } else if (type.value === 'text') {
-                askOpenAI(message);
-            }
+            // if (type.value === 'image') {
+            //     generate_image(message);
+            // } else if (type.value === 'text') {
+            //     askOpenAI(message);
+            // }
+            askOpenAI(message);
         }
         async function generate_image(message) {
             const response = await client.images.generate({

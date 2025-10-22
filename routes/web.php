@@ -9,3 +9,5 @@ Route::get('/', function () {
 Route::view('chat','welcome')->name('home');
 
 Route::post('login', [AuthController::class, 'login'])->name('login');
+
+Route::view('test', 'test');
