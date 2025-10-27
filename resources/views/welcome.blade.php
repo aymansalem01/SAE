@@ -348,7 +348,7 @@
                 </div>
                 <div class="modal-body p-4">
                     <form action="">
-                        <div class="mb-4 pb-2">
+                        {{-- <div class="mb-4 pb-2">
                             <label for="recipient-name" class="col-form-label text-white fs-5 fw-bold">Select DR
                                 Name:</label>
                             <select name="drName" id="drName" required class="form-select text-white fs-5">
@@ -357,10 +357,8 @@
                                 <option value="marwan">DR.Marwan</option>
                                 <option value="saed">DR.Saed</option>
                                 <option value="yousef">DR.Yousef</option>
-
-
                             </select>
-                        </div>
+                        </div> --}}
                         <div class="mb-4 pb-2">
                             <label for="message-text" class="col-form-label text-white fs-5 fw-bold">Student
                                 Name:</label>
