@@ -403,9 +403,9 @@
         const inputStudentEmail = document.getElementById("studentEmail");
         let studentName = sessionStorage.getItem("studentName") || "";
         let studentEmail = sessionStorage.getItem("studentEmail") || "";
-        const inputDrName = document.getElementById("drName");
-        let drName = sessionStorage.getItem("drName") || "";
-        let assistant_id = '';
+        // const inputDrName = document.getElementById("drName");
+        // let drName = sessionStorage.getItem("drName") || "";
+        let assistant_id = 'asst_B92C84vkxCYwoKtP8wwrXMZE';
         window.OPENAI_KEY = "{{ config('services.openai.key') }}";
         const loader = document.getElementById("loader");
         let thread = sessionStorage.getItem("thread") || "";
@@ -418,7 +418,7 @@
 
 
         // when windows load
-        if (studentName == "" && drName == "") {
+        if (studentName == "" ) {
             openModal.click();
         }
         let chatHistory = JSON.parse(sessionStorage.getItem("chatHistory")) || [];
@@ -474,23 +474,23 @@
         // receive message from user and send to openai using askOpenAI function
         function startChat() {
             if (userInput.value == "") return;
-            if (studentName == "" && studentEmail == "" && drName == "") {
+            if (studentName == "" && studentEmail == "") {
                 openModal.click();
                 return;
             }
 
-            if (drName == 'sami') {
-                assistant_id = 'asst_4K9Q6Wv4jyCuLHiwTJy1Ihat';
-            }
-            if (drName == 'marwan') {
-                assistant_id = 'asst_GyPiRnBa90HeLYml2daSxgyV';
-            }
-            if (drName == 'saed') {
-                assistant_id = 'asst_aQBmqKMwsSo02OwqlUlYARP5';
-            }
-            if (drName == 'yousef') {
-                assistant_id = 'asst_Gk0awJHUaBejHyWRbGGwqO9B';
-            }
+            // if (drName == 'sami') {
+            //     assistant_id = 'asst_4K9Q6Wv4jyCuLHiwTJy1Ihat';
+            // }
+            // if (drName == 'marwan') {
+            //     assistant_id = 'asst_GyPiRnBa90HeLYml2daSxgyV';
+            // }
+            // if (drName == 'saed') {
+            //     assistant_id = 'asst_aQBmqKMwsSo02OwqlUlYARP5';
+            // }
+            // if (drName == 'yousef') {
+            //     assistant_id = 'asst_Gk0awJHUaBejHyWRbGGwqO9B';
+            // }
             showMessages.style.display = "block";
             welcome.style.display = "none";
             const message = userInput.value;
@@ -624,12 +624,12 @@
 
         //save student info from modal
         function modalForm() {
-            if (inputStudentName.value != "" && inputStudentEmail.value != "" && inputDrName.value != "") {
+            if (inputStudentName.value != "" && inputStudentEmail.value != "" ) {
                 sessionStorage.setItem("studentName", inputStudentName.value);
                 // sessionStorage.setItem("subject", inputSubject.value);
                 sessionStorage.setItem("studentEmail", inputStudentEmail.value);
-                sessionStorage.setItem("drName", inputDrName.value);
-                drName = inputDrName.value;
+                // sessionStorage.setItem("drName", inputDrName.value);
+                // drName = inputDrName.value;
                 studentName = inputStudentName.value;
                 studentEmail = inputStudentEmail.value;
                 closeButton.click();
