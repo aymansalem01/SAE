@@ -19,7 +19,6 @@ class ChatBot extends Component
 
     public function sendMessage()
     {
-        dd($this->type);
         $client = OpenAI::client(env('OPENAI_API_KEY'));
         $result = $client->chat()->create([
             'model' => 'gpt-3.5-turbo',
@@ -28,6 +27,6 @@ class ChatBot extends Component
             ]
         ]);
         $this->response = $result->choices[0]->message->content;
-        dd([$this->message , $this->response , $this->type ]);
+        
     }
 }
