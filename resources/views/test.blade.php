@@ -1,228 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Portal - Workspace</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ asset('css/chat.css') }}">
 
- <style>
-        :root {
-            --bg-dark: #020617;
-            /* Make card bg much more transparent for the 3D effect */
-            --card-bg: rgba(15, 23, 42, 0.65);
-            --primary-accent: #6366f1;
-            --secondary-accent: #8b5cf6;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --border-color: rgba(255, 255, 255, 0.1);
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--bg-dark);
-            min-height: 100vh;
-            color: var(--text-main);
-            overflow: hidden; /* Prevent scroll bars due to canvas */
-            padding: 1rem;
-            position: relative;
-        }
-
-        /* 3D Canvas Container */
-        #canvas-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0; /* Behind everything */
-            pointer-events: all; /* Allow dragging */
-        }
-
-        .chat-layout {
-            position: relative;
-            z-index: 10; /* Above the canvas */
-            display: flex;
-            height: calc(100vh - 2rem);
-            max-width: 100%;
-            margin: 0 auto;
-            gap: 1rem;
-            pointer-events: none; /* Let clicks pass through gaps */
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 260px;
-            background: var(--card-bg);
-            backdrop-filter: blur(12px); /* Glass effect */
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--border-color);
-            border-radius: 1rem;
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            pointer-events: auto; /* Re-enable clicks on sidebar */
-            transform: translateX(-20px);
-            opacity: 0;
-            animation: slideIn 0.5s ease forwards 0.5s;
-        }
-
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            background: var(--card-bg);
-            backdrop-filter: blur(12px); /* Glass effect */
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--border-color);
-            border-radius: 1rem;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            position: relative;
-            pointer-events: auto; /* Re-enable clicks on main content */
-            transform: translateY(20px);
-            opacity: 0;
-            animation: slideUp 0.5s ease forwards 0.2s;
-        }
-
-        /* Animations for UI Entrance */
-        @keyframes slideIn { to { transform: translateX(0); opacity: 1; } }
-        @keyframes slideUp { to { transform: translateY(0); opacity: 1; } }
-
-        /* Messages */
-        .messages-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-
-        .msg-row { display: flex; gap: 1.25rem; }
-        .msg-row.user { flex-direction: row-reverse; }
-
-        .avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            font-size: 1.2rem;
-        }
-        .bot-avatar { background: var(--primary-accent); color: white; }
-        .user-avatar { background: #334155; color: white; }
-
-        .msg-content { max-width: 70%; line-height: 1.6; }
-        .user .msg-content { text-align: right; }
-
-        .msg-box {
-            background: rgba(30, 41, 59, 0.8);
-            padding: 1rem 1.25rem;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            display: inline-block;
-            text-align: left;
-        }
-        .user .msg-box {
-            background: var(--primary-accent);
-            color: white;
-            border: none;
-        }
-
-        /* Input Zone */
-        .input-zone {
-            padding: 1.5rem 2rem;
-            border-top: 1px solid var(--border-color);
-            background: rgba(15, 23, 42, 0.6);
-        }
-
-        /* Mode Selector */
-        .mode-selector {
-            display: inline-flex;
-            background: rgba(15, 23, 42, 0.8);
-            border: 1px solid var(--border-color);
-            padding: 4px;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-        }
-        .mode-radio { display: none; }
-        .mode-label {
-            padding: 6px 16px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--text-muted);
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .mode-label:hover { color: white; }
-
-        #mode-text:checked ~ .mode-selector label[for="mode-text"],
-        #mode-image:checked ~ .mode-selector label[for="mode-image"] {
-            background: #334155;
-            color: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .prompt-wrapper {
-            position: relative;
-            background: rgba(30, 41, 59, 0.5);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 4px;
-            transition: border-color 0.2s;
-        }
-        .prompt-wrapper:focus-within {
-            border-color: var(--primary-accent);
-            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
-        }
-
-        .prompt-input {
-            width: 100%;
-            background: transparent;
-            border: none;
-            color: white;
-            padding: 12px 16px;
-            resize: none;
-            height: 50px;
-            outline: none;
-        }
-
-        .send-btn {
-            position: absolute;
-            right: 8px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            background: var(--primary-accent);
-            border: none;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
-        .send-btn:hover { background: var(--secondary-accent); }
-
-        @media (max-width: 768px) {
-            .sidebar { display: none; }
-            .chat-layout { gap: 0; }
-            .main-content { border-radius: 0; border: none; }
-            body { padding: 0; }
-            .chat-layout { height: 100vh; }
-        }
-    </style>
 </head>
+
 <body>
     <div id="canvas-container"></div>
 
@@ -238,250 +26,40 @@
         <div class="sidebar d-none d-md-flex">
             <div class="mt-2">
                 <div class="d-flex align-items-center gap-3 mb-4" style="width: 200px">
-                 <img src="{{ asset('assets/ltuc.png') }}" alt="" width="100%">
+                    <img src="{{ asset('assets/ltuc.png') }}" alt="" width="100%">
                 </div>
 
-                <div class="p-3 bg-dark bg-opacity-50 rounded border border-secondary border-opacity-25">
-                    <small class="text-white-50 text-uppercase fw-bold" style="font-size: 0.7rem;">Current Session</small>
-                    <div class="d-flex align-items-center gap-2 mt-2">
-                        <span class="badge bg-success bg-opacity-25 text-success rounded-pill px-2">Active</span>
-                        <span class="text-white-50 small">ID: #8821X</span>
-                    </div>
-                </div>
             </div>
 
             <div class="border-top border-secondary border-opacity-25 pt-3">
                 <div class="d-flex align-items-center gap-3">
-                    <div class="bg-gradient-secondary rounded-circle d-flex align-items-center justify-content-center text-white fw-bold" style="width: 36px; height: 36px; background: #475569;">
-                        JD
+                    <div class="bg-gradient-secondary rounded-circle d-flex align-items-center justify-content-center text-white fw-bold"
+                        style="width: 36px; height: 36px; background: #475569;">
+                        {{ auth()->user()->initials }}
                     </div>
                     <div class="flex-grow-1" style="line-height: 1.2;">
-                        <div class="fw-bold small">John Doe</div>
+                        <div class="fw-bold small">{{ auth()->user()->name }}</div>
                     </div>
                     <!-- Link to Login Page -->
-                    <a href="login.html" class="text-danger hover-white text-decoration-none" title="Logout">
+                    <a href="{{ route('logout') }}" class="text-danger hover-white text-decoration-none" title="Logout"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         <i class="bi bi-box-arrow-right"></i>
                     </a>
+
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        @csrf
+                    </form>
                 </div>
             </div>
         </div>
 
         <!-- Main Content -->
-        <div class="main-content">
-            <div class="p-3 border-bottom border-secondary border-opacity-25 d-flex justify-content-between align-items-center">
-                <div class="d-flex align-items-center gap-2">
-                    <button class="btn btn-sm btn-dark d-md-none"><i class="bi bi-list"></i></button>
-                    <span class="fw-bold"><i class="bi bi-stars text-warning me-2"></i>MR.X chatbot </span>
-                </div>
-                <div>
-                    <span class="badge bg-secondary bg-opacity-25 text-secondary border border-secondary border-opacity-25">v1.0 Model</span>
-                </div>
-            </div>
 
-            {{-- Inside livewire --}}
-            <div class="messages-container">
-
-
-
-            </div>
-
-            <div class="input-zone">
-                <div class="d-flex justify-content-center">
-                    <div class="mode-selector">
-                        <label for="mode-text" class="mode-label"><i class="bi bi-chat-text"></i> Text Chat</label>
-                        <label for="mode-image" class="mode-label"><i class="bi bi-palette"></i> Image Generation</label>
-                    </div>
-                </div>
-
-                <div class="prompt-wrapper">
-                    <input type="text" class="prompt-input" placeholder="Describe what you want to create or ask...">
-                    <button class="send-btn"><i class="bi bi-arrow-up"></i></button>
-                </div>
-
-            </div>
-            {{-- end livewire --}}
-        </div>
+        @livewire('for-test')
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
-    <!-- Three.js Logic -->
-    <script>
-        // Setup Scene
-        const container = document.getElementById('canvas-container');
-        const scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2(0x020617, 0.002);
-
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(window.devicePixelRatio);
-        container.appendChild(renderer.domElement);
-
-        // --- 1. Create Gradient Texture for the Ball ---
-        function createGradientTexture() {
-            const canvas = document.createElement('canvas');
-            canvas.width = 512;
-            canvas.height = 512;
-            const context = canvas.getContext('2d');
-
-            // Create gradient (Top-Left to Bottom-Right)
-            const gradient = context.createLinearGradient(0, 0, 512, 512);
-            gradient.addColorStop(0, '#6366f1');   // Indigo
-            gradient.addColorStop(0.5, '#8b5cf6'); // Purple
-            gradient.addColorStop(1, '#a855f7');   // Lighter Purple
-
-            context.fillStyle = gradient;
-            context.fillRect(0, 0, 512, 512);
-
-            return new THREE.CanvasTexture(canvas);
-        }
-
-        const gradientMap = createGradientTexture();
-
-        // --- 2. Create Water Ball ---
-        const geometry = new THREE.SphereGeometry(2, 64, 64);
-
-        const material = new THREE.MeshPhysicalMaterial({
-            map: gradientMap,           // Apply the gradient
-            color: 0xffffff,            // White base to show texture colors
-            emissive: 0x1e1b4b,         // Deep blue glow
-            emissiveIntensity: 0.2,
-            roughness: 0.1,             // Very smooth
-            metalness: 0.1,
-            reflectivity: 1,
-            clearcoat: 1.0,             // Glass-like coating
-            clearcoatRoughness: 0.1,
-            transparent: true,
-            opacity: 0.95,
-            side: THREE.DoubleSide
-        });
-
-        const waterBall = new THREE.Mesh(geometry, material);
-        // Start scale at 0 for "pop-in" animation
-        waterBall.scale.set(0, 0, 0);
-        scene.add(waterBall);
-
-        // Lighting
-        const ambientLight = new THREE.AmbientLight(0x404040, 2);
-        scene.add(ambientLight);
-
-        const pointLight1 = new THREE.PointLight(0x8b5cf6, 2, 50); // Purple light
-        pointLight1.position.set(5, 5, 5);
-        scene.add(pointLight1);
-
-        const pointLight2 = new THREE.PointLight(0x6366f1, 2, 50); // Indigo light
-        pointLight2.position.set(-5, -5, 5);
-        scene.add(pointLight2);
-
-        const rimLight = new THREE.PointLight(0xffffff, 1.5, 20);
-        rimLight.position.set(0, 5, -5);
-        scene.add(rimLight);
-
-        camera.position.z = 8;
-
-        // Interaction State
-        let mouseX = 0;
-        let mouseY = 0;
-        let targetX = 0;
-        let targetY = 0;
-        // isDragging no longer needed for movement, but kept for touch logic if needed
-        let isDragging = false;
-
-        const originalPositions = geometry.attributes.position.array.slice();
-        const count = geometry.attributes.position.count;
-
-        window.addEventListener('resize', onWindowResize, false);
-
-        document.addEventListener('mousedown', () => isDragging = true);
-        document.addEventListener('mouseup', () => isDragging = false);
-        document.addEventListener('mousemove', onMouseMove);
-
-        document.addEventListener('touchstart', () => isDragging = true);
-        document.addEventListener('touchend', () => isDragging = false);
-        document.addEventListener('touchmove', onTouchMove);
-
-        function onWindowResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        }
-
-        function onMouseMove(event) {
-            mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-            mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
-        }
-
-        function onTouchMove(event) {
-            if(event.touches.length > 0) {
-                const touch = event.touches[0];
-                mouseX = (touch.clientX / window.innerWidth) * 2 - 1;
-                mouseY = -(touch.clientY / window.innerHeight) * 2 + 1;
-            }
-        }
-
-        // Animation Loop
-        const clock = new THREE.Clock();
-
-        function animate() {
-            requestAnimationFrame(animate);
-
-            const time = clock.getElapsedTime();
-            const positions = geometry.attributes.position.array;
-
-            // --- 3. Entrance Animation (Scale Up) ---
-            // If scale is less than 1, grow it
-            if (waterBall.scale.x < 1) {
-                const growthSpeed = 0.05;
-                waterBall.scale.x += growthSpeed;
-                waterBall.scale.y += growthSpeed;
-                waterBall.scale.z += growthSpeed;
-                if(waterBall.scale.x > 1) waterBall.scale.set(1,1,1);
-            }
-
-            // --- 4. Water Wobble Effect ---
-            for (let i = 0; i < count; i++) {
-                const x = originalPositions[i * 3];
-                const y = originalPositions[i * 3 + 1];
-                const z = originalPositions[i * 3 + 2];
-
-                // Wave pattern
-                const wave1 = Math.sin(x * 2 + time * 1.5);
-                const wave2 = Math.cos(y * 1.5 + time * 1.2);
-                const wave3 = Math.sin(z * 2 + time * 0.8);
-
-                const displacement = (wave1 + wave2 + wave3) * 0.15;
-                const scale = 1 + displacement * 0.1;
-
-                positions[i * 3] = x * scale;
-                positions[i * 3 + 1] = y * scale;
-                positions[i * 3 + 2] = z * scale;
-            }
-
-            geometry.attributes.position.needsUpdate = true;
-            geometry.computeVertexNormals();
-
-            // Movement Logic - Updated to Always Follow Cursor
-            // Base movement on mouse position
-            targetX = mouseX * 10;
-            targetY = mouseY * 6;
-
-            // Add a gentle idle float on top so it never looks "frozen"
-            targetX += Math.sin(time * 0.5) * 1.0;
-            targetY += Math.cos(time * 0.3) * 0.5;
-
-            // Smoothly interpolate current position to target
-            waterBall.position.x += (targetX - waterBall.position.x) * 0.05;
-            waterBall.position.y += (targetY - waterBall.position.y) * 0.05;
-
-            // Rotation adds to the gradient effect as texture spins
-            waterBall.rotation.y += 0.005;
-            waterBall.rotation.z += 0.002;
-
-            renderer.render(scene, camera);
-        }
-
-        animate();
-    </script>
+    <script src="{{ asset('js/chat.js') }}"></script>
 </body>
+
 </html>

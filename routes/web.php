@@ -5,10 +5,14 @@ use App\Http\Controllers\AuthController;
 use PHPUnit\Metadata\Test;
 
 Route::get('/', function () {
-    return view('login');
-});
+    return view('test');
+})->middleware('auth')->name('chat');
+
+
 Route::view('chat','welcome')->name('home');
 
 Route::post('login', [AuthController::class, 'login'])->name('login');
 
-Route::view('test', 'test')->name('test');
+
+Route::post('/logout',[AuthController::class,'logout'])->name('logout');
+Route::view('login', 'login')->name('loginPage');

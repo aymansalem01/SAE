@@ -102,7 +102,7 @@
 
     <div class="card-panel p-5">
         <div class="text-center ">
-            <div class="d-inline-flex align-items-center justify-content-center bg-opacity-10 rounded-3 mb-3" style="width: 300px;height:100px">
+            <div class="d-inline-flex align-items-center justify-content-center bg-opacity-10 rounded-3 mb-2" style="width: 200px;height:100px">
                 <img src="{{ asset('assets/ltuc.png') }}" alt="" width="100%" >
             </div>
             <h3 class="fw-bold ">MR.X Chatbot</h3>
