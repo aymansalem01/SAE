@@ -23,7 +23,7 @@ class ForTest extends Component
     public function sendMessage()
     {
         $this->tempM = $this->message;
-        $this->reset('message');
+        $this->resetInput();
         $this->thisChat[] = [
             'role' => 'user',
             'content' => $this->tempM,
@@ -45,5 +45,9 @@ class ForTest extends Component
         ];
         Session::put('chat_history', $this->thisChat);
         $this->reset('response');
+    }
+    public function resetInput()
+    {
+        $this->reset('message');
     }
 }

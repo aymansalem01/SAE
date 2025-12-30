@@ -22,15 +22,14 @@
         }
     }" x-init="scrollToBottom()"
         x-effect="$wire.thisChat; $nextTick(() => scrollToBottom())"
-        x-on:scroll-chat.window="setTimeout(() => scrollToBottom(), 100)"
-        >
+        x-on:scroll-chat.window="setTimeout(() => scrollToBottom(), 100)">
         @foreach ($thisChat as $msg)
             @if ($msg['role'] == 'user')
                 <div class="msg-row user">
                     <div class="avatar user-avatar">{{ $userChar }}</div>
                     <div class="msg-content">
                         <div class="msg-box">
-                            <p class="mb-0">{{ $msg['content'] }}</p>
+                            <p class="mb-0" style="white-space: pre-wrap;" >{{ $msg['content'] }}</p>
                         </div>
                         <small class="text-white d-block mt-1 text-end"
                             style="font-size: 0.7rem;">{{ $msg['time'] ?? '11:11 AM' }}</small>
@@ -41,7 +40,7 @@
                     <div class="avatar bot-avatar"><i class="bi bi-robot"></i></div>
                     <div class="msg-content">
                         <div class="msg-box">
-                            <p class="mb-0 text-white-75">{{ $msg['content'] }}</p>
+                            <p class="mb-0 text-white-75" style="white-space: pre-wrap;" >{{ $msg['content'] }}</p>
                         </div>
                     </div>
                 </div>
@@ -70,10 +69,26 @@
             </div>
         </div>
 
-        <div class="prompt-wrapper">
-            <input type="text" class="prompt-input" placeholder="Describe what you want to create or ask..."
-                name="input" wire:model="message"  wire:keydown.enter="sendMessage; $dispatch('scroll-chat')" >
-            <button class="send-btn" wire:click="sendMessage"><i class="bi bi-arrow-up"></i></button>
+        <div class="prompt-wrapper" x-data="{
+            resize() {
+                $el.querySelector('textarea').style.height = 'auto';
+                $el.querySelector('textarea').style.height = $el.querySelector('textarea').scrollHeight + 'px';
+            }
+        }">
+
+            <textarea class="prompt-input" placeholder="Describe what you want to create or ask..." name="input" rows="1"
+                wire:model="message"
+                @keydown.enter="if(!$event.shiftKey) {
+            $event.preventDefault();
+            $wire.sendMessage();
+            $dispatch('scroll-chat');
+            $el.style.height = 'auto';
+            }"
+            @input="resize()"></textarea>
+
+            <button class="send-btn" wire:click="sendMessage; $dispatch('scroll-chat')" >
+                <i class="bi bi-arrow-up"></i>
+            </button>
         </div>
 
     </div>
