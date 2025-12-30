@@ -24,7 +24,7 @@ class AuthController extends Controller
             }
             return redirect()->route('chat');
         } else {
-            return redirect()->back()->with(['password' => 'wrong email or password']);
+            return redirect()->back()->withErrors(['password' => 'wrong email or password'])->withInput($request->only('email'));
         }
     }
 

@@ -28,14 +28,20 @@
                 <div class="d-flex align-items-center gap-3 mb-4" style="width: 200px">
                     <img src="{{ asset('assets/ltuc.png') }}" alt="" width="100%">
                 </div>
-
+                                <div class="d-grid mb-4">
+                    <button class="btn btn-primary d-flex align-items-center justify-content-center gap-2 shadow-sm" style="background-color: var(--primary-accent); border: none;">
+                        <i class="bi bi-plus-lg"></i> New Chat
+                    </button>
+                </div>
             </div>
-
+                @php
+                    $userChar = auth()->user()->initials;
+                @endphp
             <div class="border-top border-secondary border-opacity-25 pt-3">
                 <div class="d-flex align-items-center gap-3">
                     <div class="bg-gradient-secondary rounded-circle d-flex align-items-center justify-content-center text-white fw-bold"
                         style="width: 36px; height: 36px; background: #475569;">
-                        {{ auth()->user()->initials }}
+                        {{  $userChar }}
                     </div>
                     <div class="flex-grow-1" style="line-height: 1.2;">
                         <div class="fw-bold small">{{ auth()->user()->name }}</div>

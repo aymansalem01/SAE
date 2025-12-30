@@ -113,7 +113,10 @@
             @csrf
             <div class="mb-4">
                 <label class="login-label">Email Address</label>
-                <input type="email" class="form-control login-input" name="email" placeholder="e.g. name@company.com">
+                <input type="email" class="form-control login-input" name="email" placeholder="e.g. name@company.com" value="{{ old('email') }}" >
+                @error('email')
+                <p style="color: red" >{{ $message }}</p>
+                @enderror
             </div>
 
             <div class="mb-4">
@@ -121,7 +124,10 @@
                     <label class="login-label">Password</label>
                     <a href="#" class="text-primary text-decoration-none small">Forgot Password?</a>
                 </div>
-                <input type="password" name="password" class="form-control login-input" placeholder="Enter your password">
+                <input type="password" name="password" class="form-control login-input" placeholder="Enter your password" >
+                @error('password')
+                <p style="color: red"> {{ $message }}</p>
+                @enderror
             </div>
 
 
