@@ -1,4 +1,4 @@
-
+if (window.innerWidth >= 992) {
 const container = document.getElementById('canvas-container');
 const scene = new THREE.Scene();
 scene.fog = new THREE.FogExp2(0x020617, 0.002);
@@ -31,18 +31,18 @@ function createGradientTexture() {
 
 const gradientMap = createGradientTexture();
 
-// --- 2. Create Water Ball ---
+
 const geometry = new THREE.SphereGeometry(2, 64, 64);
 
 const material = new THREE.MeshPhysicalMaterial({
-    map: gradientMap,           // Apply the gradient
-    color: 0xffffff,            // White base to show texture colors
-    emissive: 0x1e1b4b,         // Deep blue glow
+    map: gradientMap,
+    color: 0xffffff,
+    emissive: 0x1e1b4b,
     emissiveIntensity: 0.2,
-    roughness: 0.1,             // Very smooth
+    roughness: 0.1,
     metalness: 0.1,
     reflectivity: 1,
-    clearcoat: 1.0,             // Glass-like coating
+    clearcoat: 1.0,
     clearcoatRoughness: 0.1,
     transparent: true,
     opacity: 0.7,
@@ -58,11 +58,11 @@ scene.add(waterBall);
 const ambientLight = new THREE.AmbientLight(0x404040, 2);
 scene.add(ambientLight);
 
-const pointLight1 = new THREE.PointLight(0x8b5cf6, 2, 50); // Purple light
+const pointLight1 = new THREE.PointLight(0x8b5cf6, 2, 50);
 pointLight1.position.set(5, 5, 5);
 scene.add(pointLight1);
 
-const pointLight2 = new THREE.PointLight(0x6366f1, 2, 50); // Indigo light
+const pointLight2 = new THREE.PointLight(0x6366f1, 2, 50);
 pointLight2.position.set(-5, -5, 5);
 scene.add(pointLight2);
 
@@ -121,8 +121,7 @@ function animate() {
     const time = clock.getElapsedTime();
     const positions = geometry.attributes.position.array;
 
-    // --- 3. Entrance Animation (Scale Up) ---
-    // If scale is less than 1, grow it
+
     if (waterBall.scale.x < 1) {
         const growthSpeed = 0.05;
         waterBall.scale.x += growthSpeed;
@@ -174,3 +173,4 @@ function animate() {
 }
 
 animate();
+}
