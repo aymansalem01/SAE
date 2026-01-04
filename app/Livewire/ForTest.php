@@ -20,16 +20,19 @@ class ForTest extends Component
     {
         $this->thisChat = Session::get('chat_history', []);
     }
-    public function sendMessage()
+    public function sendMessage($message)
     {
-        $this->tempM = $this->message;
-        $this->resetInput();
+        if($message == ""){
+            return;
+        }
+
+        $this->reset('message');
+        $this->tempM = $message;
         $this->thisChat[] = [
             'role' => 'user',
             'content' => $this->tempM,
             'time' => now('Asia/Amman')->format('h:i A')
         ];
-
 
         $client = OpenAI::client(env('OPENAI_API_KEY'));
         $result = $client->chat()->create([
@@ -43,11 +46,15 @@ class ForTest extends Component
             'role' => 'ai',
             'content' => $this->response
         ];
+
         Session::put('chat_history', $this->thisChat);
         $this->reset('response');
     }
-    public function resetInput()
+
+    public function clearChat()
     {
-        $this->reset('message');
+        Session::put('chat_history',[]);
+        $this->mount();
     }
+
 }

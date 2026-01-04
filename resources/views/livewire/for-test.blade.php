@@ -10,8 +10,10 @@
             <span class="fw-bold"><i class="bi bi-stars text-warning me-2"></i>MR.X chatbot </span>
         </div>
         <div>
-            <span class="badge bg-secondary bg-opacity-25 text-secondary border border-secondary border-opacity-25">v1.0
-                Model</span>
+            <button class="btn btn-primary d-flex align-items-center justify-content-center gap-2 shadow-sm" wire:click="clearChat()"
+                style="background-color: var(--primary-accent); border: none;">
+                <i class="bi bi-plus-lg"></i> New Chat
+            </button>
         </div>
     </div>
 
@@ -29,7 +31,7 @@
                     <div class="avatar user-avatar">{{ $userChar }}</div>
                     <div class="msg-content">
                         <div class="msg-box">
-                            <p class="mb-0" style="white-space: pre-wrap;" >{{ $msg['content'] }}</p>
+                            <p class="mb-0" style="white-space: pre-wrap;">{{ $msg['content'] }}</p>
                         </div>
                         <small class="text-white d-block mt-1 text-end"
                             style="font-size: 0.7rem;">{{ $msg['time'] ?? '11:11 AM' }}</small>
@@ -40,7 +42,7 @@
                     <div class="avatar bot-avatar"><i class="bi bi-robot"></i></div>
                     <div class="msg-content">
                         <div class="msg-box">
-                            <p class="mb-0 text-white-75" style="white-space: pre-wrap;" >{{ $msg['content'] }}</p>
+                            <p class="mb-0 text-white-75" style="white-space: pre-wrap;">{{ $msg['content'] }}</p>
                         </div>
                     </div>
                 </div>
@@ -80,13 +82,20 @@
                 wire:model="message"
                 @keydown.enter="if(!$event.shiftKey) {
             $event.preventDefault();
-            $wire.sendMessage();
+            if ($el.value.trim() === '') return;
+            $wire.sendMessage($el.value);
+            $el.value = '';
             $dispatch('scroll-chat');
             $el.style.height = 'auto';
             }"
-            @input="resize()"></textarea>
+                x-ref="chatInput"></textarea>
 
-            <button class="send-btn" wire:click="sendMessage; $dispatch('scroll-chat')" >
+            <button class="send-btn"
+                x-on:click="
+            $wire.sendMessage($refs.chatInput.value);
+            $dispatch('scroll-chat');
+            $refs.chatInput.value = '';
+            ">
                 <i class="bi bi-arrow-up"></i>
             </button>
         </div>

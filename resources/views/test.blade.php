@@ -28,11 +28,7 @@
                 <div class="d-flex align-items-center gap-3 mb-4" style="width: 200px">
                     <img src="{{ asset('assets/ltuc.png') }}" alt="" width="100%">
                 </div>
-                                <div class="d-grid mb-4">
-                    <button class="btn btn-primary d-flex align-items-center justify-content-center gap-2 shadow-sm" style="background-color: var(--primary-accent); border: none;">
-                        <i class="bi bi-plus-lg"></i> New Chat
-                    </button>
-                </div>
+                         
             </div>
                 @php
                     $userChar = auth()->user()->initials;
